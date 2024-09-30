@@ -2,7 +2,6 @@ package repository
 
 import (
 	"capstone_project/internal/models"
-
 	"gorm.io/gorm"
 )
 
@@ -95,7 +94,6 @@ func (r *gameRepository) CreateWithAssociations(game *models.Game) (*models.Game
 		return nil, err
 	}
 
-	// Fetch the created game with all associations
 	var createdGame models.Game
 	if err := r.db.Preload("GameOwner").Preload("GameCategory").Preload("RequiredSkills").First(&createdGame, game.ID).Error; err != nil {
 		return nil, err

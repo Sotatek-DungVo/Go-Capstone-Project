@@ -4,16 +4,15 @@ import (
 	"capstone_project/internal/api/dto/game"
 	"capstone_project/internal/service"
 	"fmt"
+	"github.com/gin-gonic/gin"
 	"net/http"
 	"strconv"
 	"time"
-
-	"github.com/gin-gonic/gin"
 )
 
 type GameRequestHandler struct {
 	gameRequestService *service.GameRequestService
-	gameService * service.GameService
+	gameService        *service.GameService
 }
 
 func NewGameRequestHandler(gameRequestService *service.GameRequestService, gameService *service.GameService) *GameRequestHandler {
@@ -38,51 +37,46 @@ func NewGameRequestHandler(gameRequestService *service.GameRequestService, gameS
 func (h *GameRequestHandler) CreateGameRequest(c *gin.Context) {
 	var createDTO game.GameRequestCreateDTO
 	if err := c.ShouldBindJSON(&createDTO); err != nil {
-		c.JSON(http.StatusBadRequest, ErrorResponse{ Message: err.Error()})
+		c.JSON(http.StatusBadRequest, ErrorResponse{Message: err.Error()})
 		return
 	}
 
 	userId, exists := c.Get("userId")
 	if !exists {
-		c.JSON(http.StatusUnauthorized, ErrorResponse{ Message: "User not authenticated"})
+		c.JSON(http.StatusUnauthorized, ErrorResponse{Message: "User not authenticated"})
 		return
 	}
 
-	// Check if the game exists and get its details
 	gameDetails, err := h.gameService.GetGameByID(createDTO.GameID)
 	if err != nil {
-		c.JSON(http.StatusNotFound, ErrorResponse{ Message: "Game not found"})
+		c.JSON(http.StatusNotFound, ErrorResponse{Message: "Game not found"})
 		return
 	}
 
-	// Check if the user has already requested to join this game
-		existingRequest, err := h.gameRequestService.GetGameRequestByUserAndGame(userId.(uint), createDTO.GameID)
-		if err == nil && existingRequest != nil {
-			c.JSON(http.StatusForbidden, ErrorResponse{  Message: "You have already requested to join this game"})
-			return
-		}
-	// Check if the user is the game owner
+	existingRequest, err := h.gameRequestService.GetGameRequestByUserAndGame(userId.(uint), createDTO.GameID)
+	if err == nil && existingRequest != nil {
+		c.JSON(http.StatusForbidden, ErrorResponse{Message: "You have already requested to join this game"})
+		return
+	}
+
 	if gameDetails.GameOwner.ID == userId.(uint) {
-		c.JSON(http.StatusForbidden, ErrorResponse{  Message: "You already join your game"})
+		c.JSON(http.StatusForbidden, ErrorResponse{Message: "You already join your game"})
 		return
 	}
-	// Check if the game has already started
+
 	if time.Now().After(gameDetails.StartTime) {
-		c.JSON(http.StatusForbidden, ErrorResponse{  Message: "Game is expired"})
+		c.JSON(http.StatusForbidden, ErrorResponse{Message: "Game is expired"})
 		return
 	}
 
-	// Check if the game is full
 	if len(gameDetails.GameRequests) >= gameDetails.MaxMember-1 {
-		c.JSON(http.StatusForbidden, ErrorResponse{  Message: "The game is full"})
+		c.JSON(http.StatusForbidden, ErrorResponse{Message: "The game is full"})
 		return
 	}
-
-
 
 	gameRequest, err := h.gameRequestService.CreateGameRequest(createDTO, userId.(uint))
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, ErrorResponse{ Message: err.Error()})
+		c.JSON(http.StatusInternalServerError, ErrorResponse{Message: err.Error()})
 		return
 	}
 
@@ -125,7 +119,6 @@ func (h *GameRequestHandler) UpdateGameRequest(c *gin.Context) {
 		return
 	}
 
-	// Check if the user is the game owner
 	gameRequest, err := h.gameRequestService.GetGameRequestByID(uint(id))
 	if err != nil {
 		c.JSON(http.StatusNotFound, ErrorResponse{Message: "Game request not found"})

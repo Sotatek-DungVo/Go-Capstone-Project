@@ -15,12 +15,6 @@ func NewRequiredSkillService(repo *repository.RequiredSkillRepository) *Required
 }
 
 func (s *RequiredSkillService) CreateRequiredSkill(createDTO game.RequiredSkillCreateDTO) (game.RequiredSkillDTO, error) {
-	// Implement the logic to create a new required skill
-	// This might involve validating the input, creating a new RequiredSkill entity,
-	// saving it to the database, and then converting it to a DTO for the response
-	// ...
-
-	// Placeholder return
 	return game.RequiredSkillDTO{}, nil
 }
 

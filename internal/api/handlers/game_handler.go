@@ -3,14 +3,13 @@ package handlers
 import (
 	"capstone_project/internal/api/dto/game"
 	"capstone_project/internal/service"
+	"github.com/gin-gonic/gin"
 	"net/http"
 	"strconv"
-
-	"github.com/gin-gonic/gin"
 )
 
 type ErrorResponse struct {
-    Message string `json:"message"`
+	Message string `json:"message"`
 }
 
 type GameHandler struct {

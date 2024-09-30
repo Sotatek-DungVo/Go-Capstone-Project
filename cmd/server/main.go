@@ -13,24 +13,20 @@ import (
 func main() {
 	log := logger.NewLogger()
 
-	// Load configuration
 	cfg, err := config.Load()
 	if err != nil {
 		log.Fatal().Err(err).Msg("Failed to load configuration")
 	}
 
-	// Initialize database
 	db, err := database.Initialize(cfg.DatabaseURL)
 	if err != nil {
 		log.Fatal().Err(err).Msgf("Failed to initialize database: %s", cfg.DatabaseURL)
 	}
 
-	// Run migrations
 	if err := database.Migrate(db); err != nil {
 		log.Fatal().Err(err).Msg("Failed to run database migrations")
 	}
 
-	// Initialize router
 	router := gin.Default()
 	router.Use(cors.New(cors.Config{
 		AllowOrigins:     []string{"*"},
@@ -41,10 +37,8 @@ func main() {
 		MaxAge:           12 * 60 * 60,
 	}))
 
-	// Setup API
 	api.SetupRoutes(router, db)
 
-	// Start server
 	log.Info().Msgf("Server starting on %s", cfg.ServerAddress)
 	err = router.Run(cfg.ServerAddress)
 	if err != nil {

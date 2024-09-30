@@ -14,7 +14,6 @@ func NewUserService(repo repository.UserRepository) *UserService {
 	return &UserService{repo: repo}
 }
 
-// Add this new method
 func (s *UserService) ListUsers(page int, limit int, search map[string]string) ([]*dto.UserResponseDTO, error) {
 	users, err := s.repo.List(page, limit, search)
 	if err != nil {
@@ -29,7 +28,6 @@ func (s *UserService) ListUsers(page int, limit int, search map[string]string) (
 	return userDTOs, nil
 }
 
-// Update this helper function
 func mapUserToResponseDTO(user *models.User) *dto.UserResponseDTO {
 	return &dto.UserResponseDTO{
 		ID:          user.ID,
@@ -40,7 +38,6 @@ func mapUserToResponseDTO(user *models.User) *dto.UserResponseDTO {
 		Gender:      user.Gender,
 		CreatedAt:   user.CreatedAt,
 		UpdatedAt:   user.UpdatedAt,
-		// Exclude intensive fields like Password
 	}
 }
 

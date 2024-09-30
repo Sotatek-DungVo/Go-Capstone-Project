@@ -4,7 +4,6 @@ import (
 	"capstone_project/internal/models"
 	"capstone_project/internal/repository"
 	"capstone_project/internal/api/dto/game"
-
 )
 
 type GameRequestService struct {
@@ -45,7 +44,6 @@ func (s *GameRequestService) UpdateGameRequest(id uint, updateDTO game.GameReque
 		return nil, err
 	}
 
-	// Update status if provided
 	if updateDTO.Status != "" {
 		gameRequest.Status = models.GameRequestStatus(updateDTO.Status)
 	}

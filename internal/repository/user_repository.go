@@ -2,7 +2,6 @@ package repository
 
 import (
 	"capstone_project/internal/models"
-
 	"gorm.io/gorm"
 )
 

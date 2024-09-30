@@ -24,7 +24,6 @@ func (s *GameService) CreateGame(createDTO dto.GameCreateDTO, userID uint) (*dto
 		GameCategoryID: createDTO.GameCategoryID,
 	}
 
-	// Handle required skills
 	if len(createDTO.RequiredSkills) > 0 {
 		skills, err := s.repo.GetRequiredSkillsByIDs(createDTO.RequiredSkills)
 		if err != nil {
@@ -56,7 +55,6 @@ func (s *GameService) UpdateGame(id uint, updateDTO dto.GameUpdateDTO) (*dto.Gam
 		return nil, err
 	}
 
-	// Update fields if provided
 	if updateDTO.Name != "" {
 		game.Name = updateDTO.Name
 	}

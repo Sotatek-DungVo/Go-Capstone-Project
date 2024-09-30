@@ -5,10 +5,9 @@ import (
 	"capstone_project/internal/repository"
 	"errors"
 	"fmt"
-	"time"
-
 	"github.com/dgrijalva/jwt-go"
 	"golang.org/x/crypto/bcrypt"
+	"time"
 )
 
 type AuthServiceInterface interface {
@@ -26,20 +25,17 @@ func NewAuthService(repo *repository.UserRepository, jwtSecret string) *AuthServ
 }
 
 func (s *AuthService) CreateUser(user *models.User) error {
-	// Check if the user already exists
 	existingUser, err := s.repo.GetUserByUsername(user.Username)
 
 	if err == nil && existingUser != nil {
 		return errors.New("username already exists")
 	}
 
-	// Check if the email already exists
 	existingUser, err = s.repo.GetUserByEmail(user.Email)
 	if err == nil && existingUser != nil {
 		return errors.New("email already exists")
 	}
 
-	// Hash the password
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.DefaultCost)
 	if err != nil {
 		return errors.New("failed to hash password")
@@ -48,7 +44,6 @@ func (s *AuthService) CreateUser(user *models.User) error {
 
 	fmt.Println(hashedPassword)
 
-	// Create the user in the database
 	err = s.repo.Create(user)
 	if err != nil {
 		return errors.New("failed to create user")

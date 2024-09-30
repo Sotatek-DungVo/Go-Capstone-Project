@@ -1,14 +1,12 @@
 package handlers
 
 import (
+	_ "capstone_project/docs"
 	dto "capstone_project/internal/api/dto/auth"
 	"capstone_project/internal/models"
 	"capstone_project/internal/service"
-	"net/http"
-
-	_ "capstone_project/docs"
-
 	"github.com/gin-gonic/gin"
+	"net/http"
 )
 
 type AuthHandler struct {
@@ -41,8 +39,8 @@ func (h *AuthHandler) CreateUser(c *gin.Context) {
 		Email:       registerDTO.Email,
 		Password:    registerDTO.Password,
 		Description: registerDTO.Description,
-		Gender: models.Gender(registerDTO.Gender),
-		AvatarUrl: registerDTO.AvatarUrl,
+		Gender:      models.Gender(registerDTO.Gender),
+		AvatarUrl:   registerDTO.AvatarUrl,
 	}
 
 	if err := h.service.CreateUser(user); err != nil {
@@ -82,11 +80,10 @@ func (h *AuthHandler) LoginUser(c *gin.Context) {
 	}
 
 	response := dto.LoginResponseDTO{
-		Token: token,
-		Username: user.Username,
+		Token:     token,
+		Username:  user.Username,
 		AvatarUrl: user.AvatarUrl,
 	}
 
 	c.JSON(http.StatusOK, response)
 }
-

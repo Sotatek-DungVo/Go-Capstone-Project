@@ -1,13 +1,11 @@
 package handlers
 
 import (
-	"net/http"
-	"strconv"
-
 	"capstone_project/internal/api/dto/category"
 	"capstone_project/internal/service"
-
 	"github.com/gin-gonic/gin"
+	"net/http"
+	"strconv"
 )
 
 type GameCategoryHandler struct {

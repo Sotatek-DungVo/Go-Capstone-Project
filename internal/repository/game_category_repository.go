@@ -26,5 +26,3 @@ func (r *GameCategoryRepository) List(page int, limit int) ([]*models.GameCatego
 func (r *GameCategoryRepository) Create(category *models.GameCategory) error {
 	return r.db.Create(category).Error
 }
-
-// ... existing code ...

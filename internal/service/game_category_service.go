@@ -50,5 +50,3 @@ func mapGameCategoryToResponseDTO(category *models.GameCategory) *dto.GameCatego
 		UpdatedAt: category.UpdatedAt,
 	}
 }
-
-// ... existing code ...

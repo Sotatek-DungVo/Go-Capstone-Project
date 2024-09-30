@@ -5,12 +5,11 @@ import (
 	"capstone_project/internal/middleware"
 	"capstone_project/internal/repository"
 	"capstone_project/internal/service"
-	"os"
-
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 	"gorm.io/gorm"
+	"os"
 )
 
 // @title Capstone Project API
@@ -27,14 +26,12 @@ func SetupRoutes(router *gin.Engine, db *gorm.DB) {
 
 	jwtSecret := os.Getenv("JWT_SECRET")
 	if jwtSecret == "" {
-		jwtSecret = "default_secret" // It's better to panic or log an error in a real application
+		jwtSecret = "default_secret"
 	}
 
 	requiredSkillRepo := repository.NewRequiredSkillRepository(db)
 	requiredSkillService := service.NewRequiredSkillService(requiredSkillRepo)
 	requiredSkillHandler := handlers.NewRequiredSkillHandler(requiredSkillService)
-
-	
 
 	userRepo := repository.NewUserRepository(db)
 	authService := service.NewAuthService(userRepo, jwtSecret)
@@ -82,7 +79,7 @@ func SetupRoutes(router *gin.Engine, db *gorm.DB) {
 	}
 	requiredSkillRoutes := router.Group("/required-skills")
 	{
-		requiredSkillRoutes.POST("/",authMiddleware ,requiredSkillHandler.CreateRequiredSkills)
+		requiredSkillRoutes.POST("/", authMiddleware, requiredSkillHandler.CreateRequiredSkills)
 		requiredSkillRoutes.GET("/", requiredSkillHandler.ListRequiredSkills)
 	}
 	userService := service.NewUserService(*userRepo)

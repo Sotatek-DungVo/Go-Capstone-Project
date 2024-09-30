@@ -106,4 +106,3 @@ func (h *RequiredSkillHandler) CreateRequiredSkills(c *gin.Context) {
 
 	c.JSON(http.StatusCreated, skills)
 }
-

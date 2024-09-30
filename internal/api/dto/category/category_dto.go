@@ -14,4 +14,3 @@ type GameCategoryCreateDTO struct {
 	Name     string `json:"name" binding:"required"`
 	ImageUrl string `json:"imageUrl" binding:"required"`
 }
-
